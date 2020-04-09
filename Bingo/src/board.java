@@ -22,7 +22,6 @@ public class board extends JPanel{
 	private ArrayList<String> values = number(25);//arraylist of 25 random integers in string form
 	private ArrayList<Number> nums; //arraylist of the Number objects that will go on the board
 	
-	
 	Number nine = new Number(values.get(0), xVal[2],yVal[4]);
 	
 	
