@@ -120,7 +120,7 @@ public class board extends JPanel{
 	
 	public static void main(String[] args) {
 		
-		board n  = new board();
+		//board n  = new board();
 		
 	}
 }
