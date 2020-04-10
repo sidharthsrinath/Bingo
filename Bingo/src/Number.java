@@ -13,12 +13,17 @@ public class Number {
 	private String value;
 	private int x, y;
 	private final int width = 120, height = 120;
-	public boolean clicked;
+	private boolean clicked;
 	private Color c=new Color(1f,0f,0f,0 ); 
 	
-	Rectangle numBox = new Rectangle(x,y,width,height);
+	//Rectangle numBox = new Rectangle(x,y,width,height);
 	
-	
+	public boolean getClicked() {
+		return clicked;
+	}
+	public void setClicked(Boolean a) {
+		this.clicked = a;
+	}
 	public String getValue() {
 		return value;
 	}
@@ -48,6 +53,8 @@ public class Number {
 		this.value = value;
 		this.x = x;
 		this.y = y;
+		
+		makeCorrect();
 	}
 	
 	public void paint(Graphics g) {
@@ -61,7 +68,9 @@ public class Number {
 	}
 	
 	public void makeCorrect() {
-		c = new Color(1f,0f,0f,.5f );
+		if(clicked) {
+		c = Color.BLACK;
+		}
 	}
 
 	

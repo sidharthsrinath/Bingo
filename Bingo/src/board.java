@@ -22,7 +22,7 @@ public class board extends JPanel{
 	
 	
 	private ArrayList<String> values = number(25);//arraylist of 25 random integers in string form
-	private ArrayList<Number> nums; //arraylist of the Number objects that will go on the board
+	public ArrayList<Number> nums; //arraylist of the Number objects that will go on the board
 	
 	Number nine = new Number(values.get(0), xVal[2],yVal[4]);
 	
@@ -117,10 +117,15 @@ public class board extends JPanel{
 		return numObjects;
 	}
 	
-	
+	/*
 	public static void main(String[] args) {
 		
-		//board n  = new board();
+		board n  = new board();
+		
+		n.nums.get(0).setClicked(true);
+		
+		System.out.println(n.nums.get(0).getClicked());
 		
 	}
+	*/
 }
