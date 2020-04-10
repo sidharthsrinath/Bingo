@@ -13,8 +13,10 @@ public class board extends JPanel{
 	
 	//yes 
 	
-	int[] xVal = {120,240,360,480,600};//array of X values for numbers
-	int[] yVal = {200,320,440,560,680}; //array of Y values
+	int[] xVal = {100,220,340,460,580}; //array of x coordinates for numBoxes
+	int[] yVal = {100,220,340,460,580}; //array of y coordinates for numBoxes
+	
+
 	ArrayList<Pair> coordinates = new ArrayList<Pair>();
 	
 	
@@ -63,6 +65,9 @@ public class board extends JPanel{
 		g.setColor(new Color(206,227,151));//area where bingo will take place
 		g.fillRect(100, 100, 600, 600);
 		
+		for(int i = 0; i < nums.size(); i++) {//draw the numbers
+			nums.get(i).paint(g);
+		}
 		
 		g.setColor(Color.black);
 		for(int i = 100; i <= width-100; i+=120) { //drawing the horizontal gridlines
@@ -74,9 +79,7 @@ public class board extends JPanel{
 		
 		//nine.paint(g);
 		
-		for(int i = 0; i < nums.size(); i++) {
-			nums.get(i).paint(g);
-		}
+		
 		
 	}
 	

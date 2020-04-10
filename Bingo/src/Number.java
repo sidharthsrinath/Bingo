@@ -1,16 +1,20 @@
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
-public class Number implements ActionListener{
+public class Number {
 	
 	private String value;
 	private int x, y;
-	private final int width = 100, height = 100;
+	private final int width = 120, height = 120;
 	public boolean clicked;
+	private Color c=new Color(1f,0f,0f,0 ); 
 	
 	Rectangle numBox = new Rectangle(x,y,width,height);
 	
@@ -47,17 +51,18 @@ public class Number implements ActionListener{
 	}
 	
 	public void paint(Graphics g) {
+		g.setColor(c);
+		g.fillRect(x, y, width, height);
 		
+		g.setColor(Color.BLACK);
 		g.setFont(new Font("TimesRoman",Font.PLAIN, 80));
-		g.drawString(value, x, y);
+		g.drawString(value,x+20, y+100);
 		
 	}
 	
-	public void actionPerformed(ActionEvent e) {
-		
-		
+	public void makeCorrect() {
+		c = new Color(1f,0f,0f,.5f );
 	}
-		
 
 	
 		
