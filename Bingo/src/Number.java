@@ -13,16 +13,16 @@ public class Number {
 	private String value;
 	private int x, y;
 	private final int width = 120, height = 120;
-	private boolean clicked;
+	private boolean isClicked;
 	private Color c = new Color(1f,0f,0f,0 ); 
 	
 	//Rectangle numBox = new Rectangle(x,y,width,height);
 	
-	public boolean getClicked() {
-		return clicked;
+	public boolean getIsClicked() {
+		return isClicked;
 	}
-	public void setClicked(Boolean a) {
-		this.clicked = a;
+	public void setIsClicked(Boolean a) {
+		this.isClicked = a;
 	}
 	public String getValue() {
 		return value;
@@ -70,7 +70,7 @@ public class Number {
 	public void makeCorrect() {
 		
 		c = Color.BLACK;
-		clicked = true;
+		isClicked = true;
 		
 	}
 
