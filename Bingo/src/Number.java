@@ -14,7 +14,9 @@ public class Number {
 	private int x, y;
 	private final int width = 120, height = 120;
 	private boolean isClicked;
-	private Color c = new Color(1f,0f,0f,0 );
+	private Color c = new Color(1f,0f,0f,0f);
+	private boolean marked = false;
+
 	
 	//Rectangle numBox = new Rectangle(x,y,width,height);
 	
@@ -68,8 +70,13 @@ public class Number {
 	}
 	
 	public void makeCorrect() {
-		
-		c = new Color(1f,0f,0f, .5f ); 
+		if(marked) { 
+			c = new Color(1f,0f,0f,0f);
+			marked = !marked;
+		}else {
+			c = new Color(1f,0f,0f,.5f);
+			marked = !marked;
+		}
 		isClicked = true;
 		
 	}

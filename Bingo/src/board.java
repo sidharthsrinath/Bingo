@@ -19,25 +19,38 @@ import javax.swing.Timer;
 public class board extends JFrame implements ActionListener,MouseListener{	
 	
 	//global variables
-	int width = 800;
-	int height = 800;
+	int width = 1000;
+	int height = 1000;
 	int mouseX;//x coordinate of mouse
 	int mouseY;//y coordinate of mouse
 	int mouseSide = 1;//side length of mouse
 	Pair mousePair = new Pair(mouseX, mouseY);//pair object that conatins coordinates of mouse
 	Timer t;
+	
+	int startX = 200;
+	int startY = 200;
+	int interval = 120;
 
 	//Number objects
-	int[] xVal = {100,220,340,460,580}; //array of x coordinates for numBoxes
-	int[] yVal = {100,220,340,460,580}; //array of y coordinates for numBoxes
+	int[] xVal; //array of x coordinates for numBoxes
+	int[] yVal; //array of y coordinates for numBoxes
 	ArrayList<Pair> coordinates = new ArrayList<Pair>();
 	private ArrayList<String> values = number(25);//arraylist of 25 random integers in string form
 	public ArrayList<Number> nums; //arraylist of the Number objects that will go on the board		
 	
-	public board() {
+	public int[] createCoordArray(int startVal, int interval) { 
+		int[] coordArray = new int[5];
+		for(int i = 0; i < coordArray.length; i++) {
+			coordArray[i] = startVal + (i*interval);
+		}
+		return coordArray;
+	}
+	
+	board() {
 		
+		xVal = createCoordArray(startX,interval);
+		yVal = createCoordArray(startY,interval);
 		coordinates = setCoordinates(xVal,yVal);
-		
 		nums = setNumbers(25, values, coordinates);
 		
 		setTitle("Bingo");
@@ -59,18 +72,18 @@ public class board extends JFrame implements ActionListener,MouseListener{
 		g.setColor(new Color(141,177,171));
 		g.fillRect(0, 0, width, height);
 		g.setColor(new Color(206,227,151));//area where bingo will take place
-		g.fillRect(100, 100, 600, 600);
+		g.fillRect(startX, startY, 600, 600);
 		
 		for(int i = 0; i < nums.size(); i++) {//draw the numbers
 			nums.get(i).paint(g);
 		}
 		
 		g.setColor(Color.black);
-		for(int i = 100; i <= width-100; i+=120) { //drawing the horizontal gridlines
-			g.drawLine(i,100,i,height-100);
+		for(int i = startX; i <= width-startX; i+=interval) { //drawing the horizontal gridlines
+			g.drawLine(i,startY,i,height-startY);
 		}
-		for(int i = 100; i <= height-100; i+=120) {//drawing vertical gridlines
-			g.drawLine(100,i,width-100,i);
+		for(int i = startY; i <= height-startY; i+=interval) {//drawing vertical gridlines
+			g.drawLine(startX,i,width-startY,i);
 		}
 		
 		
@@ -79,12 +92,21 @@ public class board extends JFrame implements ActionListener,MouseListener{
 	
 	//works
 	public ArrayList<String> number(int a){ //creates an ArrayList of length "a" digits with random integers between 1 and 30
-		ArrayList<String> numbers = new ArrayList<String>();
 		
+		ArrayList<String> numbers = new ArrayList<String>();
 		
 		// add something to check that there arent the same numbers multiple times
 		for(int i = 0; i < a; i++ ) {
 			numbers.add(String.valueOf((int)(Math.random()*30)));
+		}
+		
+		for(int i = 0; i < numbers.size(); i++) {
+			for(int j = i+1; j < numbers.size(); j++) {
+				while(numbers.get(i).equals(numbers.get(j))) {
+					//System.out.println(numbers.get(i)+" "+numbers.get(j));
+					numbers.set(j,String.valueOf((int)(Math.random()*30)));
+				}
+			}
 		}
 		
 		return numbers;
@@ -125,10 +147,10 @@ public class board extends JFrame implements ActionListener,MouseListener{
 			int numberSide = 120;
 			
 			if(intersect(x, y,numberSide)) {
-					s.setIsClicked(true);
-					s.makeCorrect();
-					repaint(); //find a better method to use than repaint()
-					System.out.println(i + " " +s.getIsClicked());
+				s.setIsClicked(true);
+				s.makeCorrect();
+				repaint(); //find a better method to use than repaint()
+				//System.out.println(i + " " +s.getIsClicked());
 			}
 		}
 	}
