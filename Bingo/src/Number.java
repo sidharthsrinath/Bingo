@@ -14,7 +14,7 @@ public class Number {
 	private int x, y;
 	private final int width = 120, height = 120;
 	private boolean clicked;
-	private Color c=new Color(1f,0f,0f,0 ); 
+	private Color c = new Color(1f,0f,0f,0 ); 
 	
 	//Rectangle numBox = new Rectangle(x,y,width,height);
 	
@@ -54,7 +54,7 @@ public class Number {
 		this.x = x;
 		this.y = y;
 		
-		makeCorrect();
+		
 	}
 	
 	public void paint(Graphics g) {
@@ -68,9 +68,10 @@ public class Number {
 	}
 	
 	public void makeCorrect() {
-		if(clicked) {
+		
 		c = Color.BLACK;
-		}
+		clicked = true;
+		
 	}
 
 	

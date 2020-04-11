@@ -2,6 +2,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 public class Driver implements MouseListener{
 	
@@ -15,23 +16,23 @@ public class Driver implements MouseListener{
 	int numsLength = bingo.nums.size();
 	
 	public Driver() {
-		
 	}
 	
 	public void paint(Graphics g) {
 		bingo.paint(g);
-		updateClicked();
 	}
 	
-	public void updateClicked() {
+	public void correct(ArrayList<Number> n) {
 		
-		for(int i = 0; i < numsLength; i++) {
-			Number s = bingo.nums.get(i);
+		for(int i = 0; i < n.size(); i++) {
+			Number s = n.get(i);
 			
 			Pair number = new Pair(s.getX(),s.getX());
 			int numberSide = 120;
 			
-			bingo.nums.get(i).setClicked(boxHit(number,numberSide,mousePair,mouseSide));
+			if(boxHit(number, numberSide, mousePair, mouseSide)) {
+				s.makeCorrect();
+			}
 			
 		}
 	}
@@ -58,6 +59,8 @@ public class Driver implements MouseListener{
 	public void mouseClicked(MouseEvent e) {		
 		mouseX = e.getX();
 		mouseY = e.getY();
+		
+		correct(bingo.nums);
 		
 		System.out.println(mouseX + " "+ mouseY);
 	}

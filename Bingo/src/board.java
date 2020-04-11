@@ -32,6 +32,11 @@ public class board extends JPanel{
 	
 	
 	public board() {
+		
+		coordinates = setCoordinates(xVal,yVal);
+		
+		nums = setNumbers(25, values, coordinates);
+		
 		JFrame frame = new JFrame();
 		frame.setSize(width, height);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -39,19 +44,10 @@ public class board extends JPanel{
 		
 		frame.setVisible(true);
 		
+		repaint();
 		
 		
-		coordinates = setCoordinates(xVal,yVal);
 		
-		/*for(int i = 0; i < coordinates.size(); i++) {
-			System.out.println(i +" "+coordinates.get(i));
-		}*/
-		
-		nums = setNumbers(25, values, coordinates);
-		
-		/*for(int i = 0; i < nums.size(); i++) {
-		System.out.println(nums.get(i));
-		}*/
 		
 	}
 	
@@ -117,15 +113,11 @@ public class board extends JPanel{
 		return numObjects;
 	}
 	
-	/*
+	
 	public static void main(String[] args) {
 		
 		board n  = new board();
 		
-		n.nums.get(0).setClicked(true);
-		
-		System.out.println(n.nums.get(0).getClicked());
-		
 	}
-	*/
+	
 }
