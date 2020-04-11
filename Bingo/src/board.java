@@ -44,7 +44,8 @@ public class board extends JPanel {
 		
 		frame.setVisible(true);
 		
-			
+		correct(nums);
+		
 		repaint();
 		
 		
@@ -76,10 +77,11 @@ public class board extends JPanel {
 			g.drawLine(100,i,width-100,i);
 		}
 		
-		correct(nums);
+		
 		
 	}
 	
+	//works
 	public ArrayList<String> number(int a){ //creates an ArrayList of length "a" digits with random integers between 1 and 30
 		ArrayList<String> numbers = new ArrayList<String>();
 		
@@ -93,6 +95,7 @@ public class board extends JPanel {
 		 
 	}
 	
+	//works
 	public ArrayList<Pair> setCoordinates(int[] a, int[] b) {
 		
 		for(int x = 0; x < a.length; x++) {
@@ -103,6 +106,7 @@ public class board extends JPanel {
 		return coordinates;
 	}
 	
+	//works
 	public ArrayList<Number> setNumbers(int length, ArrayList<String> vals, ArrayList<Pair> coords) {
 		
 		ArrayList<Number> numObjects = new ArrayList<Number>();
@@ -114,10 +118,15 @@ public class board extends JPanel {
 		return numObjects;
 	}
 	
+	//runs through arraylist during instantiation but only once
+	//still dont know if is checks intersect correctly and makes correct correctly
+	//figure out how to keep this method getting called like an update method
 	public void correct(ArrayList<Number> n) {
 		
 		for(int i = 0; i < n.size(); i++) {
 			Number s = n.get(i);
+			
+			System.out.println(i);
 			
 			Pair number = new Pair(s.getX(),s.getX());
 			int numberSide = 120;
@@ -128,8 +137,11 @@ public class board extends JPanel {
 				//}
 			}
 		}
+		
+		System.out.println("hello");
 	}
 	
+	//works
 	public boolean intersect(Pair a, int sideBox, Pair b, int sideMouse) {//method that checks if two rectangles intersect (mouse and number box)
 		
 		int x1 = a.getA();//x, y, and side lengths for the number objects
