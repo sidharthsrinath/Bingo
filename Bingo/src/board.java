@@ -1,34 +1,38 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
-public class board extends JPanel {
-	private int width = 800;
-	private int height = 800;
-	private BoxListener listener = new BoxListener();
+public class board extends JFrame implements ActionListener,MouseListener{	
 	
-	int mouseX = listener.getMouseX();//x coordinate of mouse
-	int mouseY = listener.getMouseY();;//y coordinate of mouse
+	//global variables
+	int width = 800;
+	int height = 800;
+	int mouseX;//x coordinate of mouse
+	int mouseY;//y coordinate of mouse
 	int mouseSide = 1;//side length of mouse
 	Pair mousePair = new Pair(mouseX, mouseY);//pair object that conatins coordinates of mouse
-	
-	
+	Timer t;
+
+	//Number objects
 	int[] xVal = {100,220,340,460,580}; //array of x coordinates for numBoxes
 	int[] yVal = {100,220,340,460,580}; //array of y coordinates for numBoxes
-	
 	ArrayList<Pair> coordinates = new ArrayList<Pair>();
-
 	private ArrayList<String> values = number(25);//arraylist of 25 random integers in string form
 	public ArrayList<Number> nums; //arraylist of the Number objects that will go on the board		
-	
 	
 	public board() {
 		
@@ -36,30 +40,22 @@ public class board extends JPanel {
 		
 		nums = setNumbers(25, values, coordinates);
 		
-		JFrame frame = new JFrame("Bingo");
-		frame.getContentPane().addMouseListener(listener);
-		frame.setSize(width, height);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.add(this);
+		setTitle("Bingo");
+		setSize(width,height);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setVisible(true);
+		t = new Timer(17, this);
+		t.start();
+		Container c = this.getContentPane();
+		c.setLayout(new BorderLayout());
 		
-		frame.setVisible(true);
-		
-		correct(nums);
-		
-		repaint();
-		
-		
-		
-		
-	}
-	
-	public BoxListener getListener() {
-		return listener;
+		//adding the mouselistener
+		c.addMouseListener(this); //in order for mouseListener to be recognized it MUST be added to the content pane
 	}
 	
 	public void paint(Graphics g) {
 		super.paintComponents(g);
-		
+				
 		g.setColor(new Color(141,177,171));
 		g.fillRect(0, 0, width, height);
 		g.setColor(new Color(206,227,151));//area where bingo will take place
@@ -118,41 +114,37 @@ public class board extends JPanel {
 		return numObjects;
 	}
 	
-	//runs through arraylist during instantiation but only once
-	//still dont know if is checks intersect correctly and makes correct correctly
-	//figure out how to keep this method getting called like an update method
-	public void correct(ArrayList<Number> n) {
+	//works BUT uses repaint which does a weird refreshing thing so fix that if needed
+	public void correct(ArrayList<Number> n) { //makes marked tiles correct
 		
 		for(int i = 0; i < n.size(); i++) {
 			Number s = n.get(i);
 			
-			System.out.println(i);
-			
-			Pair number = new Pair(s.getX(),s.getX());
+			int x = s.getX();
+			int y = s.getY();	
 			int numberSide = 120;
 			
-			//if(listener.getClicked()) {
-				if(intersect(number, numberSide, mousePair, mouseSide)) {
+			if(intersect(x, y,numberSide)) {
+					s.setIsClicked(true);
 					s.makeCorrect();
-				//}
+					repaint(); //find a better method to use than repaint()
+					System.out.println(i + " " +s.getIsClicked());
 			}
 		}
-		
-		System.out.println("hello");
 	}
 	
 	//works
-	public boolean intersect(Pair a, int sideBox, Pair b, int sideMouse) {//method that checks if two rectangles intersect (mouse and number box)
+	public boolean intersect(int x, int y, int sideBox) {//method that checks if two rectangles intersect (mouse and number box)
 		
-		int x1 = a.getA();//x, y, and side lengths for the number objects
-		int y1 = a.getB();
+		int x1 = x;//x, y, and side lengths for the number objects
+		int y1 = y;
 		int width1 = sideBox;
 		int height1 = sideBox;
 		
-		int x2 = b.getA();//x, y, and side lengths for mouse object
-		int y2 = b.getB();
-		int width2 = sideMouse;
-		int height2 = sideMouse;
+		int x2 = mouseX;//x, y, and side lengths for mouse object
+		int y2 = mouseY;
+		int width2 = mouseSide;
+		int height2 = mouseSide;
 		
 		
 		Rectangle box = new Rectangle(x1,y1,width1,height1); //number rectangle
@@ -160,12 +152,42 @@ public class board extends JPanel {
 		
 		return box.intersects(mouse); //true = mouse clicked on number 
 	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		mouseX = e.getX();//update mouse x and y coordinates
+		mouseY = e.getY();
+		correct(nums);
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
 	
-	public static void main(String[] args) {
-		
-		board n  = new board();
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
 		
 	}
 
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		//repaint();
+	}
+
+	public static void main(String[] args) {
+		board n  = new board();
+	}
 	
 }
