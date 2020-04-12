@@ -7,24 +7,38 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
-public class Number {
+public class Callout {
 	
+	private ArrayList <String> values;
 	private String value;
 	private int x, y;
 	private final int width = 120, height = 120;
 	private boolean isClicked;
-	private Color c = new Color(1f,0f,0f,0f);
+	private Color c = new Color(1f,0f,0f,.5f);
 	private boolean marked = false;
+	private int index = 0;
 
 	
 	//Rectangle numBox = new Rectangle(x,y,width,height);
-	
+	public int getIndex() {
+		return index;
+	}
+	public void setIndex(int index) {
+		this.index = index;
+	}
 	public boolean getIsClicked() {
 		return isClicked;
 	}
 	public void setIsClicked(Boolean a) {
 		this.isClicked = a;
+	}
+	public ArrayList<String> getValues() {
+		return values;
+	}
+	public void setValues(ArrayList<String> values) {
+		this.values = values;
 	}
 	public String getValue() {
 		return value;
@@ -48,43 +62,52 @@ public class Number {
 		return value + " "+x+" "+y;
 	}
 	
-	public Number() {
+	public Callout() {
 	}
 	
-	public Number(String value) {
+	public Callout(String value) {
 		this.value = value;
 	}
-	public Number(String value, int x, int y){
-		this.value = value;
+	public Callout(ArrayList <String> values, int x, int y, int index){
+		this.values = values;
 		this.x = x;
 		this.y = y;
-	}
-	
-	public Number(String value, int x, int y, Color c){
-		this.value = value;
-		this.x = x;
-		this.y = y;
-		this.c = c;
+		this.index = index;
+		value = values.get(index);
 	}
 	
 	public void paint(Graphics g) {
 		g.setColor(c);
-		g.fillRect(x, y, width, height);
+		g.fillOval(x, y, width, height);
 		
 		g.setColor(Color.BLACK);
 		g.setFont(new Font("TimesRoman",Font.PLAIN, 80));
-		g.drawString(value,x+20, y+100);
+		if(value.length() < 2) {
+			g.drawString(value,x+40, y+90);
+		}else {
+			g.drawString(value,x+20, y+90);
+		}
 		
 	}
 	
+	public void forward() {
+		index+=1;
+		value = values.get(index);
+	}
+	
+	/*
 	public void makeCorrect() {
-		
+		if(marked) { 
+			c = new Color(1f,0f,0f,0f);
+			marked = !marked;
+		}else {
 			c = new Color(1f,0f,0f,.5f);
 			marked = !marked;
+		}
 		isClicked = true;
 		
 	}
-
+	*/
 	
 		
 	

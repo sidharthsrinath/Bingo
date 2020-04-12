@@ -24,8 +24,15 @@ public class board extends JFrame implements ActionListener,MouseListener{
 	int mouseX;//x coordinate of mouse
 	int mouseY;//y coordinate of mouse
 	int mouseSide = 1;//side length of mouse
-	Pair mousePair = new Pair(mouseX, mouseY);//pair object that conatins coordinates of mouse
+	Pair mousePair = new Pair(mouseX, mouseY);//pair object that conatains coordinates of mouse
 	Timer t;
+	
+	//callout of the number you're supposed to find on their board
+	int index = 0;
+	ArrayList<String> calloutValues = number(25);
+	Callout callout = new Callout(calloutValues,440, 50, 0);
+	Pair calloutCoords = new Pair(440, 50);
+	 
 	
 	int startX = 200;
 	int startY = 200;
@@ -35,24 +42,17 @@ public class board extends JFrame implements ActionListener,MouseListener{
 	int[] xVal; //array of x coordinates for numBoxes
 	int[] yVal; //array of y coordinates for numBoxes
 	ArrayList<Pair> coordinates = new ArrayList<Pair>();
-	private ArrayList<String> values = number(25);//arraylist of 25 random integers in string form
+	private ArrayList<String> numValues = number(25);//arraylist of 25 random integers in string form
 	public ArrayList<Number> nums; //arraylist of the Number objects that will go on the board		
 	
-	public int[] createCoordArray(int startVal, int interval) { 
-		int[] coordArray = new int[5];
-		for(int i = 0; i < coordArray.length; i++) {
-			coordArray[i] = startVal + (i*interval);
-		}
-		return coordArray;
-	}
 	
 	board() {
 		
 		xVal = createCoordArray(startX,interval);
 		yVal = createCoordArray(startY,interval);
 		coordinates = setCoordinates(xVal,yVal);
-		nums = setNumbers(25, values, coordinates);
-		
+		nums = setNumbers(25, numValues, coordinates);
+				
 		setTitle("Bingo");
 		setSize(width,height);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -68,12 +68,14 @@ public class board extends JFrame implements ActionListener,MouseListener{
 	
 	public void paint(Graphics g) {
 		super.paintComponents(g);
-				
+		
 		g.setColor(new Color(141,177,171));
 		g.fillRect(0, 0, width, height);
 		g.setColor(new Color(206,227,151));//area where bingo will take place
 		g.fillRect(startX, startY, 600, 600);
 		
+		
+
 		for(int i = 0; i < nums.size(); i++) {//draw the numbers
 			nums.get(i).paint(g);
 		}
@@ -87,9 +89,18 @@ public class board extends JFrame implements ActionListener,MouseListener{
 		}
 		
 		
-		
+		callout.paint(g);
 	}
 	
+	//works
+	public int[] createCoordArray(int startVal, int interval) { 
+		int[] coordArray = new int[5];
+		for(int i = 0; i < coordArray.length; i++) {
+			coordArray[i] = startVal + (i*interval);
+		}
+		return coordArray;
+	}
+
 	//works
 	public ArrayList<String> number(int a){ //creates an ArrayList of length "a" digits with random integers between 1 and 30
 		
@@ -136,8 +147,9 @@ public class board extends JFrame implements ActionListener,MouseListener{
 		return numObjects;
 	}
 	
+	
 	//works BUT uses repaint which does a weird refreshing thing so fix that if needed
-	public void correct(ArrayList<Number> n) { //makes marked tiles correct
+	public void correct(ArrayList<Number> n, Callout f) { //makes marked tiles correct
 		
 		for(int i = 0; i < n.size(); i++) {
 			Number s = n.get(i);
@@ -146,11 +158,14 @@ public class board extends JFrame implements ActionListener,MouseListener{
 			int y = s.getY();	
 			int numberSide = 120;
 			
-			if(intersect(x, y,numberSide)) {
-				s.setIsClicked(true);
-				s.makeCorrect();
+			if(intersect(x, y,numberSide)&&!s.getIsClicked()) {
+				if(s.getValue().equals(callout.getValue())) {
+				s.setIsClicked(true);	
+				f.forward();
+				s.makeCorrect();			
 				repaint(); //find a better method to use than repaint()
 				//System.out.println(i + " " +s.getIsClicked());
+			}
 			}
 		}
 	}
@@ -172,6 +187,7 @@ public class board extends JFrame implements ActionListener,MouseListener{
 		Rectangle box = new Rectangle(x1,y1,width1,height1); //number rectangle
 		Rectangle mouse = new Rectangle(x2,y2,width2,height2); //mouse rectangle
 		
+		
 		return box.intersects(mouse); //true = mouse clicked on number 
 	}
 
@@ -179,7 +195,7 @@ public class board extends JFrame implements ActionListener,MouseListener{
 	public void mouseClicked(MouseEvent e) {
 		mouseX = e.getX();//update mouse x and y coordinates
 		mouseY = e.getY();
-		correct(nums);
+		correct(nums,callout);
 	}
 
 	@Override
