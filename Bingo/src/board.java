@@ -6,6 +6,8 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -16,7 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class board extends JFrame implements ActionListener,MouseListener{	
+public class board extends JFrame implements ActionListener,MouseListener, KeyListener{	
 	
 	//global variables
 	int width = 1000;
@@ -29,7 +31,7 @@ public class board extends JFrame implements ActionListener,MouseListener{
 	
 	//callout of the number you're supposed to find on their board
 	int index = 0;
-	ArrayList<String> calloutValues = number(25);
+	ArrayList<String> calloutValues = numberString(100);
 	Callout callout = new Callout(calloutValues,440, 50, 0);
 	Pair calloutCoords = new Pair(440, 50);
 	 
@@ -41,9 +43,9 @@ public class board extends JFrame implements ActionListener,MouseListener{
 	//Number objects
 	int[] xVal; //array of x coordinates for numBoxes
 	int[] yVal; //array of y coordinates for numBoxes
-	ArrayList<Pair> coordinates = new ArrayList<Pair>();
-	private ArrayList<String> numValues = number(25);//arraylist of 25 random integers in string form
-	public ArrayList<Number> nums; //arraylist of the Number objects that will go on the board		
+	Pair[][] coordinates;
+	private String[][] numValues = number(25);//arraylist of 25 random integers in string form
+	public Number[][] nums; //arraylist of the Number objects that will go on the board		
 	
 	
 	board() {
@@ -64,6 +66,7 @@ public class board extends JFrame implements ActionListener,MouseListener{
 		
 		//adding the mouselistener
 		c.addMouseListener(this); //in order for mouseListener to be recognized it MUST be added to the content pane
+		c.addKeyListener(this);
 	}
 	
 	public void paint(Graphics g) {
@@ -76,8 +79,10 @@ public class board extends JFrame implements ActionListener,MouseListener{
 		
 		
 
-		for(int i = 0; i < nums.size(); i++) {//draw the numbers
-			nums.get(i).paint(g);
+		for(int r = 0; r < nums.length; r++) {//draw the numbers
+			for(int c = 0; c < nums[0].length; c++) {
+				nums[r][c].paint(g);
+			}
 		}
 		
 		g.setColor(Color.black);
@@ -102,72 +107,95 @@ public class board extends JFrame implements ActionListener,MouseListener{
 	}
 
 	//works
-	public ArrayList<String> number(int a){ //creates an ArrayList of length "a" digits with random integers between 1 and 30
+	public Pair[][] setCoordinates(int[] a, int[] b) {
+		
+		Pair[][] coords = new Pair[5][5];
+		
+		for(int x = 0; x < a.length; x++) {
+			for(int y = 0; y < b.length; y++) {
+				coords[x][y] = new Pair(a[x],b[y]);
+			}
+		}
+		
+		
+		return coords;
+		
+	}
+	
+	//creates multiples of same number
+	public String[][] number(int a){ //creates an ArrayList of length "a" digits with random integers between 1 and 30
+		
+		String[][] numbers = new String[(int) Math.sqrt(a)][(int) Math.sqrt(a)];
+		
+		// add something to check that there arent the same numbers multiple times
+		for(int r = 0; r < numbers.length; r++ ) {
+			for(int c = 0; c< numbers[0].length; c++) {
+				numbers[r][c] = String.valueOf((int)(Math.random()*30));
+			}
+		}
+		
+		
+		return numbers;
+		 
+	}
+	
+	public ArrayList<String> numberString(int a){ //creates an ArrayList of length "a" digits with random integers between 1 and 30
 		
 		ArrayList<String> numbers = new ArrayList<String>();
 		
 		// add something to check that there arent the same numbers multiple times
-		for(int i = 0; i < a; i++ ) {
-			numbers.add(String.valueOf((int)(Math.random()*30)));
+		for(int r = 0; r < a; r++ ) {
+				numbers.add(String.valueOf((int)(Math.random()*30)));
 		}
 		
-		for(int i = 0; i < numbers.size(); i++) {
-			for(int j = i+1; j < numbers.size(); j++) {
-				while(numbers.get(i).equals(numbers.get(j))) {
-					//System.out.println(numbers.get(i)+" "+numbers.get(j));
-					numbers.set(j,String.valueOf((int)(Math.random()*30)));
-				}
-			}
-		}
 		
 		return numbers;
 		 
 	}
 	
 	//works
-	public ArrayList<Pair> setCoordinates(int[] a, int[] b) {
+	public Number[][] setNumbers(int length, String[][] vals, Pair[][] coords) {
 		
-		for(int x = 0; x < a.length; x++) {
-			for(int y = 0; y < b.length; y++) {
-				coordinates.add(new Pair(a[x],b[y]));
+		Number[][] numObjects = new Number[5][5];
+		int counter = 0;
+		
+		for(int r = 0; r < numObjects.length; r++) {
+			for(int c = 0; c < numObjects[0].length; c++) {
+				numObjects[r][c] = new Number(vals[r][c], coords[r][c].getA(),coords[r][c].getB());
 			}
-		}
-		return coordinates;
-	}
-	
-	//works
-	public ArrayList<Number> setNumbers(int length, ArrayList<String> vals, ArrayList<Pair> coords) {
-		
-		ArrayList<Number> numObjects = new ArrayList<Number>();
-		
-		for(int i = 0; i < length; i++) {
-			numObjects.add(new Number(vals.get(i),coords.get(i).getA(),coords.get(i).getB()));
 		}
 		
 		return numObjects;
 	}
 	
-	
 	//works BUT uses repaint which does a weird refreshing thing so fix that if needed
-	public void correct(ArrayList<Number> n, Callout f) { //makes marked tiles correct
+	public void correct(Number[][] n, Callout f) { //makes marked tiles correct
 		
-		for(int i = 0; i < n.size(); i++) {
-			Number s = n.get(i);
+		for(int r = 0; r < n.length; r++) {
+			for(int c = 0; c < n[0].length; c++) {
+			Number s = n[r][c];
 			
 			int x = s.getX();
 			int y = s.getY();	
 			int numberSide = 120;
 			
-			if(intersect(x, y,numberSide)&&!s.getIsClicked()) {
-				if(s.getValue().equals(callout.getValue())) {
-				s.setIsClicked(true);	
-				f.forward();
-				s.makeCorrect();			
-				repaint(); //find a better method to use than repaint()
+				if(intersect(x, y,numberSide)&&!s.getIsClicked()) {
+					if(s.getValue().equals(callout.getValue())) {
+						s.setIsClicked(true);	
+						f.forward();
+						s.makeCorrect();			
+						repaint(); //find a better method to use than repaint()
 				//System.out.println(i + " " +s.getIsClicked());
-			}
+					}
+				}
 			}
 		}
+	}
+	
+	public boolean gameWon(board a) { //NEED TO FINISH AN
+		
+		
+		return false;
 	}
 	
 	//works
@@ -196,8 +224,16 @@ public class board extends JFrame implements ActionListener,MouseListener{
 		mouseX = e.getX();//update mouse x and y coordinates
 		mouseY = e.getY();
 		correct(nums,callout);
+		
+		if (e.getClickCount() == 2 && !e.isConsumed()) {
+		     e.consume();
+		     callout.forward();
+		     repaint();
+		}
+		
+		
 	}
-
+	
 	@Override
 	public void mousePressed(MouseEvent e) {
 	
@@ -224,8 +260,29 @@ public class board extends JFrame implements ActionListener,MouseListener{
 		//repaint();
 	}
 
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		System.out.println(e.getKeyCode());
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	public static void main(String[] args) {
 		board n  = new board();
+		
+		n.nums[0][1].makeCorrect();
+		
 	}
 	
 }

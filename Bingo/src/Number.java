@@ -14,6 +14,7 @@ public class Number {
 	private int x, y;
 	private final int width = 120, height = 120;
 	private boolean isClicked;
+	public boolean correct;
 	private Color c = new Color(1f,0f,0f,0f);
 	private boolean marked = false;
 
@@ -77,11 +78,11 @@ public class Number {
 		
 	}
 	
-	public void makeCorrect() {
-		
-			c = new Color(1f,0f,0f,.5f);
-			marked = !marked;
+	public void makeCorrect() {//updates the numbers that have been marked off
+		c = new Color(1f,0f,0f,.5f);
+		marked = !marked;
 		isClicked = true;
+		correct = true;
 		
 	}
 
