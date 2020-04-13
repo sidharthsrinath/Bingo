@@ -28,10 +28,12 @@ public class board extends JFrame implements ActionListener,MouseListener, KeyLi
 	int mouseSide = 1;//side length of mouse
 	Pair mousePair = new Pair(mouseX, mouseY);//pair object that conatains coordinates of mouse
 	Timer t;
+
+	FinishedScreen m = new FinishedScreen();
 	
 	//callout of the number you're supposed to find on their board
 	int index = 0;
-	ArrayList<String> calloutValues = numberString(100);
+	ArrayList<String> calloutValues = numberString(1000);
 	Callout callout = new Callout(calloutValues,440, 50, 0);
 	Pair calloutCoords = new Pair(440, 50);
 	 
@@ -95,10 +97,12 @@ public class board extends JFrame implements ActionListener,MouseListener, KeyLi
 		
 		
 		callout.paint(g);
+		
+		m.paint(g);
 	}
 	
 	//works
-	public int[] createCoordArray(int startVal, int interval) { 
+	public int[] createCoordArray(int startVal, int interval) { //creates array of x/y values for numbers based off starting location 
 		int[] coordArray = new int[5];
 		for(int i = 0; i < coordArray.length; i++) {
 			coordArray[i] = startVal + (i*interval);
@@ -107,7 +111,7 @@ public class board extends JFrame implements ActionListener,MouseListener, KeyLi
 	}
 
 	//works
-	public Pair[][] setCoordinates(int[] a, int[] b) {
+	public Pair[][] setCoordinates(int[] a, int[] b) {//makes a 2D array of pair objects that contain coordinates of numbers
 		
 		Pair[][] coords = new Pair[5][5];
 		
@@ -192,12 +196,6 @@ public class board extends JFrame implements ActionListener,MouseListener, KeyLi
 		}
 	}
 	
-	public boolean gameWon(board a) { //NEED TO FINISH AN
-		
-		
-		return false;
-	}
-	
 	//works
 	public boolean intersect(int x, int y, int sideBox) {//method that checks if two rectangles intersect (mouse and number box)
 		
@@ -218,6 +216,38 @@ public class board extends JFrame implements ActionListener,MouseListener, KeyLi
 		
 		return box.intersects(mouse); //true = mouse clicked on number 
 	}
+	
+	public boolean gameWon(board a) { //NEED TO FINISH AN
+		
+		boolean won = false;
+		
+		
+		//condition 1: vertical line of 5
+		for(int r = 0; r < a.nums.length; r++) {
+			int counter = 0;
+			for(int c = 0; c <  a.nums[0].length; c++) {
+				if(a.nums[r][c].correct) counter++;
+			}
+			if(counter == 5) {
+				won = true;
+				return won;
+			}
+		}
+		
+		for(int c = 0; c < a.nums[0].length; c++) {
+			int counter = 0;
+			for(int r = 0; r <  a.nums.length; r++) {
+				if(a.nums[r][c].correct) counter++;
+			}
+			if(counter == 5) {
+				won = true;
+				return won;
+			}
+		}
+		
+		return false;
+	}
+	
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -231,6 +261,9 @@ public class board extends JFrame implements ActionListener,MouseListener, KeyLi
 		     repaint();
 		}
 		
+		if(gameWon(this)) {
+			m.setWon(true);
+		}
 		
 	}
 	
@@ -280,8 +313,6 @@ public class board extends JFrame implements ActionListener,MouseListener, KeyLi
 	
 	public static void main(String[] args) {
 		board n  = new board();
-		
-		n.nums[0][1].makeCorrect();
 		
 	}
 	
