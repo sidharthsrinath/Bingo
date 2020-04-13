@@ -234,6 +234,7 @@ public class board extends JFrame implements ActionListener,MouseListener, KeyLi
 			}
 		}
 		
+		//condition 2: horizontal line
 		for(int c = 0; c < a.nums[0].length; c++) {
 			int counter = 0;
 			for(int r = 0; r <  a.nums.length; r++) {
@@ -245,7 +246,32 @@ public class board extends JFrame implements ActionListener,MouseListener, KeyLi
 			}
 		}
 		
+		//condition 3: diagonal line left to right
+		int count = 0;
+		for(int r = 0; r < a.nums.length; r++) {
+			for(int c = r; c <  r+1; c++) {
+				if(a.nums[r][c].correct) count++;
+			}
+		}
+		if(count == 5) {
+			won = true;
+			return won;
+		}
+		
+		//condition 4: diagonal line right to left
+		int counter = 0;
+		for(int r = 4; r > 0; r--) {
+			for(int c = r; c <  r+1; c++) {
+				if(a.nums[r][c].correct) counter++;
+			}
+		}
+		if(counter == 5) {
+			won = true;
+			return won;
+		}
+		
 		return false;
+	
 	}
 	
 
