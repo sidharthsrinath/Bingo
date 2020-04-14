@@ -175,7 +175,7 @@ public class board extends JFrame implements ActionListener,MouseListener, KeyLi
 		 
 	}
 	
-	public boolean hasDuplicates(ArrayList<String> n) {
+	public boolean hasDuplicates(ArrayList<String> n) { //checks if an arraylist of strings has duplicate elements
 		
 		for(int i = 0; i < n.size(); i++) {
 			for(int j = i+1; j < n.size(); j++) {
