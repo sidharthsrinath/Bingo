@@ -138,9 +138,52 @@ public class board extends JFrame implements ActionListener,MouseListener, KeyLi
 			}
 		}
 		
+		ArrayList <String> numberArrays = new ArrayList<String>();
+		
+		for(int r = 0; r < numbers.length; r++ ) { //converting 2d array to arraylist to replace duplicates
+			for(int c = 0; c< numbers[0].length; c++) {
+				numberArrays.add(numbers[r][c]);
+			}
+		}
+		
+	
+		while(hasDuplicates(numberArrays)) { //loop runs until there are no duplicates
+		for(int f = 0; f< numberArrays.size(); f++) {
+			String str = numberArrays.get(f);
+			for(int k = f+1; k< numberArrays.size(); k++) {
+				String str1 = numberArrays.get(k);
+				if(str.equals(str1)) {
+					numberArrays.remove(f); //removes one of the duplicates
+					numberArrays.add(String.valueOf((int)(Math.random()*30))); //add another random number
+				}
+			}
+		}
+		}
+		
+		System.out.println(hasDuplicates(numberArrays));
+		
+		int counter1 = 0;
+		for(int r = 0; r < numbers.length; r++ ) { //coverting arraylist back into 2d array to return
+			for(int c = 0; c< numbers[0].length; c++) {
+				numbers[r][c] = numberArrays.get(counter1);
+				counter1+=1;
+			}
+		}
+
 		
 		return numbers;
 		 
+	}
+	
+	public boolean hasDuplicates(ArrayList<String> n) {
+		
+		for(int i = 0; i < n.size(); i++) {
+			for(int j = i+1; j < n.size(); j++) {
+				if(n.get(i).equals(n.get(j))) return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	public ArrayList<String> numberString(int a){ //creates an ArrayList of length "a" digits with random integers between 1 and 30
@@ -265,7 +308,7 @@ public class board extends JFrame implements ActionListener,MouseListener, KeyLi
 				if(a.nums[r][c].correct) counter++;
 			}
 		}
-		if(counter == 5) {
+		if(count == 5) {
 			won = true;
 			return won;
 		}
